@@ -368,7 +368,7 @@
           colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'],
           densityDivisor: 12000,
           speed: 0.35,
-          twinkleSpeed: 0.07
+          twinkleSpeed: 0.04
         }
       },
       fire: {
@@ -389,8 +389,8 @@
         stars: {
           colors: ['#ffd1a9', '#ff7a2d', '#ffd9c4'],
           densityDivisor: 9000,
-          speed: 0.35,
-          twinkleSpeed: 0.02
+          speed: 0.10,
+          twinkleSpeed: 0.002
         }
       },
       forest: {
@@ -506,8 +506,6 @@
       Object.entries(theme.vars).forEach(([k, v]) => {
         root.style.setProperty(k, v);
       });
-      const indicator = document.getElementById('themeIndicator');
-      indicator.textContent = 'theme: ' + themeName;
       starSettings = theme.stars;
       resizeStars();
       document.querySelectorAll('.controls button').forEach(btn => {
@@ -524,9 +522,7 @@
       const rangeText = slides[i].dataset.range || '';
       document.getElementById('dateRange').textContent = rangeText;
 
-      // Если slide содержит dataset.theme -> используем его (приоритет)
       const explicitTheme = slides[i].dataset.theme || null;
-      // Иначе пробуем подобрать по RANGE_THEME_MAP
       const mappedTheme = explicitTheme ? explicitTheme : getThemeForRange(rangeText);
       const themeName = mappedTheme || themeOrder[i % themeOrder.length] || 'neon';
       applyTheme(themeName);
