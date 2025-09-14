@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,9 +19,8 @@
       --text: #e7e9ee;
       --muted: #a7adbb;
       --accent: #5b9cff;
-      --photo-border: 2px solid #5b9cff;
-      --btn-bg: linear-gradient(135deg, #5b9cff, #3a7add);
     }
+
     body {
       margin: 0;
       background: var(--bg);
@@ -31,128 +31,379 @@
       min-height: 100vh;
     }
     header {
-      background: var(--card);
-      padding: 15px;
+  background: #171924;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+  flex-wrap: wrap;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+nav {
+  margin-top: 10px;
+}
+
+nav a {
+  color: #f1f1f1;
+  text-decoration: none;
+  margin: 6px 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+nav a:hover {
+  color: #ffcc66;
+}
+
+    main {
+      flex: 1;
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .pyramid {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+      gap: 40px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
       flex-wrap: wrap;
     }
-    header h1 { margin: 0; font-size: 20px; }
-    nav { margin-top: 10px; }
-    nav a { color: var(--text); text-decoration: none; margin: 6px 12px; font-weight: bold; }
-    nav a:hover { color: var(--accent); }
-    main { flex: 1; max-width: 1000px; margin: auto; padding: 30px 20px; text-align: center; }
+
     .teacher {
       background: var(--card);
-      border: var(--photo-border);
+      border: 2px solid var(--accent);
       border-radius: 16px;
       padding: 12px;
       width: 160px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, .3);
       transition: transform 0.3s;
     }
-    .teacher:hover { transform: scale(1.05); }
+
+    .teacher:hover {
+      transform: scale(1.05);
+    }
+
     .teacher img {
       width: 100%;
       height: 160px;
       object-fit: cover;
+      object-position: top;
       border-radius: 12px;
-      border: var(--photo-border);
+      border: 2px solid #2b2f45;
     }
-    .name { margin-top: 10px; background: var(--card); border-radius: 10px; padding: 6px; font-size: 14px; }
+
+    .name {
+      margin-top: 10px;
+      background: #141828;
+      border-radius: 10px;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    .dean {
+      position: relative;
+      border: 4px solid transparent;
+      border-radius: 16px;
+      background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 0deg, red, orange, red) border-box;
+      animation: spinBorder 6s linear infinite;
+    }
+
+    .dean img {
+      border: 3px solid rgb(101, 37, 37);
+    }
+
+    @keyframes spinBorder {
+      0% {
+        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 0deg, red, orange, red) border-box;
+      }
+
+      100% {
+        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 360deg, red, orange, red) border-box;
+      }
+    }
+
+    .zam {
+      border: 3px solid gold;
+    }
+
+    .zam img {
+      border: 3px solid rgb(145, 128, 34);
+    }
+
+    .slide {
+      display: none;
+      animation: fade 0.5s;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .date-range {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
     .controls button {
-      background: var(--btn-bg);
+      background: linear-gradient(135deg, #5b9cff, #3a7add);
       color: #fff;
       border: none;
       padding: 10px 20px;
       border-radius: 12px;
       font-weight: bold;
+      font-size: 15px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(91, 156, 255, .4);
       transition: all .3s ease;
     }
+
+    .controls button:hover {
+      background: linear-gradient(135deg, #6baeff, #4a8dff);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(91, 156, 255, .6);
+    }
+
+    .controls button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(91, 156, 255, .4);
+    }
+
+    @media(max-width:599px) {
+      .row {
+        gap: 10px;
+      }
+
+      .teacher {
+        width: 90px;
+        padding: 6px;
+      }
+
+      .teacher img {
+        height: 90px;
+      }
+
+      .name {
+        font-size: 12px;
+        padding: 4px;
+      }
+
+      body {
+        font-size: 15px;
+      }
+
+      header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  nav {
+    margin-top: 12px;
+  }
+
+  nav a {
+    margin: 8px;
+    font-size: 15px;
+  }
+
+    }
+    footer {
+      background: #141828;
+      border-top: 1px solid #23273a;
+      padding: 20px;
+      text-align: center;
+    }
+  
   </style>
 </head>
+
 <body>
   <canvas id="stars"></canvas>
   <header>
     <h1>Университет RPM</h1>
-    <nav><a href="#">Главная</a><a href="#">Сотрудники</a></nav>
+    <nav>
+      <a href="index.html">2FA + TGprotect</a>
+      <a href="locker.html">Смена скинов(гардероб)</a>
+      <a href="sync.html">Синхронизация</a>
+      <a href="teacherlist.html">Сотрудники</a>
+    </nav>
   </header>
   <main>
     <h2>Сотрудники</h2>
     <div class="date-range" id="dateRange"></div>
+
     <div id="slidesContainer"></div>
+
     <div class="controls">
       <button onclick="prevSlide()">⬅ Назад</button>
       <button onclick="nextSlide()">Вперед ➡</button>
     </div>
+
   </main>
-  <footer><p>© 2025 Университет RPM</p></footer>
 
-<script>
-const themes = {
-  cosmos: { vars: {"--bg":"#0f1115","--card":"#171924","--text":"#e7e9ee","--muted":"#a7adbb","--accent":"#5b9cff","--photo-border":"2px solid #5b9cff","--btn-bg":"linear-gradient(135deg,#5b9cff,#3a7add)"}, stars:{type:"stars",colors:["#ffffff","#d4fbff","#ffe9c4"]} },
-  neon: { vars: {"--bg":"#050010","--card":"#0f001f","--text":"#e0fffc","--muted":"#7fffff","--accent":"#ff00cc","--photo-border":"2px solid #ff00cc","--btn-bg":"linear-gradient(135deg,#ff00cc,#00ffff)"}, stars:{type:"squares",colors:["#ff00cc","#00ffff","#ffff00"]} },
-  fire: { vars: {"--bg":"#1a0f0f","--card":"#2a1810","--text":"#ffe5cc","--muted":"#ffb38a","--accent":"#ff4500","--photo-border":"2px solid #ff4500","--btn-bg":"linear-gradient(135deg,#ff7b00,#ff0000)"}, stars:{type:"flames",colors:["#ff4500","#ff7b00","#ffff66"]} },
-  ocean: { vars: {"--bg":"#001f33","--card":"#00334d","--text":"#e6faff","--muted":"#66c2ff","--accent":"#0099ff","--photo-border":"2px solid #0099ff","--btn-bg":"linear-gradient(135deg,#00ccff,#0066ff)"}, stars:{type:"bubbles",colors:["#00ccff","#66ffff","#ffffff"]} },
-  pastel: { vars: {"--bg":"#fff0f6","--card":"#ffe6f0","--text":"#333","--muted":"#888","--accent":"#ff99cc","--photo-border":"2px solid #ff99cc","--btn-bg":"linear-gradient(135deg,#ffccff,#ff99cc)"}, stars:{type:"circles",colors:["#ff99cc","#ffccff","#ccffff"]} },
-  cyberpunk: { vars: {"--bg":"#0a001f","--card":"#190033","--text":"#f2e6ff","--muted":"#b399ff","--accent":"#ff0099","--photo-border":"2px solid #ff0099","--btn-bg":"linear-gradient(135deg,#ff0099,#9900ff)"}, stars:{type:"triangles",colors:["#ff0099","#9900ff","#00ffff"]} },
-  forest: { vars: {"--bg":"#0f1f0f","--card":"#1f3320","--text":"#e6ffe6","--muted":"#99cc99","--accent":"#33cc33","--photo-border":"2px solid #33cc33","--btn-bg":"linear-gradient(135deg,#33cc33,#006600)"}, stars:{type:"leaves",colors:["#33cc33","#66ff66","#99cc99"]} },
-  desert: { vars: {"--bg":"#332b00","--card":"#4d3f00","--text":"#fff5cc","--muted":"#d9b38c","--accent":"#ffcc00","--photo-border":"2px solid #ffcc00","--btn-bg":"linear-gradient(135deg,#ffcc00,#ff9900)"}, stars:{type:"sand",colors:["#ffcc00","#ffff99","#d9b38c"]} },
-  ice: { vars: {"--bg":"#001f33","--card":"#00334d","--text":"#e6faff","--muted":"#66c2ff","--accent":"#00ffff","--photo-border":"2px solid #00ffff","--btn-bg":"linear-gradient(135deg,#66ffff,#00ccff)"}, stars:{type:"snowflakes",colors:["#ffffff","#ccffff","#99ccff"]} },
-  sunset: { vars: {"--bg":"#330014","--card":"#660029","--text":"#ffe6f0","--muted":"#ff99aa","--accent":"#ff3366","--photo-border":"2px solid #ff3366","--btn-bg":"linear-gradient(135deg,#ff6699,#ff3300)"}, stars:{type:"dots",colors:["#ff3366","#ff9900","#ffff66"]} }
-};
+  <footer>
+    <p>© 2025 Университет RPM</p>
+  </footer>
+  <script>
+    let current = 0;
 
-let current = 0;
-async function loadStaff(){
-  const res = await fetch('staff.json'); const data = await res.json();
-  window.staffData = data;
-  const container=document.getElementById('slidesContainer');
-  data.forEach(period=>{
-    const slide=document.createElement('div'); slide.classList.add('slide'); slide.dataset.range=period.range;
-    const pyramid=document.createElement('div'); pyramid.classList.add('pyramid');
-    period.staff.forEach(person=>{
-      const div=document.createElement('div'); div.classList.add('teacher');
-      const img=document.createElement('img'); img.src=person.img; img.alt=person.name;
-      div.appendChild(img);
-      const nameDiv=document.createElement('div'); nameDiv.classList.add('name'); nameDiv.innerHTML=person.name; div.appendChild(nameDiv);
-      pyramid.appendChild(div);
-    });
-    slide.appendChild(pyramid); container.appendChild(slide);
-  });
-  showSlide(0);
-}
-function showSlide(i){
-  const slides=document.querySelectorAll('.slide');
-  slides.forEach(s=>s.classList.remove('active')); slides[i].classList.add('active');
-  document.getElementById('dateRange').textContent=slides[i].dataset.range;
-  const themeName=window.staffData[i].theme;
-  if(themeName&&themes[themeName]){
-    const theme=themes[themeName];
-    for(const [k,v] of Object.entries(theme.vars)){document.documentElement.style.setProperty(k,v);}
-    currentStarMode=theme.stars; resizeStars();
-  }
-}
-function nextSlide(){const slides=document.querySelectorAll('.slide'); current=(current+1)%slides.length; showSlide(current);}
-function prevSlide(){const slides=document.querySelectorAll('.slide'); current=(current-1+slides.length)%slides.length; showSlide(current);}
-loadStaff();
+    async function loadStaff() {
+      const res = await fetch('staff.json');
+      const data = await res.json();
+      const container = document.getElementById('slidesContainer');
 
-// ===== ФОН =====
-const starCanvas=document.getElementById('stars'); const ctx=starCanvas.getContext('2d');
-let stars=[]; let currentStarMode={type:"stars",colors:["#fff"]};
-function resizeStars(){starCanvas.width=window.innerWidth; starCanvas.height=window.innerHeight; const n=Math.floor((window.innerWidth*window.innerHeight)/8000);
-stars=Array.from({length:n},()=>({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.8+0.5,dx:(Math.random()-0.5)*0.15,dy:(Math.random()-0.5)*0.15,color:currentStarMode.colors[Math.floor(Math.random()*currentStarMode.colors.length)],twinkle:Math.random()*100}));}
-window.addEventListener('resize',resizeStars); resizeStars();
-function drawStars(){ctx.clearRect(0,0,starCanvas.width,starCanvas.height); for(const s of stars){s.x+=s.dx; s.y+=s.dy; if(s.x<0)s.x=starCanvas.width;if(s.x>starCanvas.width)s.x=0;if(s.y<0)s.y=starCanvas.height;if(s.y>starCanvas.height)s.y=0; s.twinkle+=0.05+Math.random()*0.02; const alpha=0.5+0.5*Math.sin(s.twinkle); ctx.globalAlpha=alpha; ctx.fillStyle=s.color;
-  if(currentStarMode.type==="stars"){ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();}
-  else if(currentStarMode.type==="squares"){ctx.fillRect(s.x,s.y,s.r*2,s.r*2);}
-  else if(currentStarMode.type==="flames"){ctx.beginPath();ctx.moveTo(s.x,s.y-s.r);ctx.lineTo(s.x+s.r,s.y+s.r);ctx.lineTo(s.x-s.r,s.y+s.r);ctx.closePath();ctx.fill();}
-  else if(currentStarMode.type==="circles"){ctx.beginPath();ctx.arc(s.x,s.y,s.r*2,0,Math.PI*2);ctx.fill();}
-  else {ctx.fillRect(s.x,s.y,2,2);} }
-ctx.globalAlpha=1;}
-function animateStars(){drawStars();requestAnimationFrame(animateStars);} animateStars();
-</script>
+      data.forEach(period => {
+        const slide = document.createElement('div');
+        slide.classList.add('slide');
+        slide.dataset.range = period.range;
+
+        const pyramid = document.createElement('div');
+        pyramid.classList.add('pyramid');
+
+        const deanRow = document.createElement('div'); deanRow.classList.add('row');
+        const zamRow = document.createElement('div'); zamRow.classList.add('row');
+        const teacherRow = document.createElement('div'); teacherRow.classList.add('row');
+
+        period.staff.forEach(person => {
+          const div = document.createElement('div'); div.classList.add('teacher');
+          if (person.role === 'dean') div.classList.add('dean');
+          if (person.role === 'zam') div.classList.add('zam');
+
+          const img = document.createElement('img'); img.src = person.img; img.alt = person.name;
+          img.onerror = () => img.src = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Question_book-new.svg';
+          div.appendChild(img);
+
+          const nameDiv = document.createElement('div'); nameDiv.classList.add('name');
+          nameDiv.innerHTML = person.name + (person.role === 'dean' ? '<br>(Декан)' : person.role === 'zam' ? '<br>(Зам. декана)' : '');
+          div.appendChild(nameDiv);
+
+          if (person.role === 'dean') deanRow.appendChild(div);
+          else if (person.role === 'zam') zamRow.appendChild(div);
+          else teacherRow.appendChild(div);
+        });
+
+        pyramid.appendChild(deanRow);
+        if (zamRow.children.length) pyramid.appendChild(zamRow);
+        if (teacherRow.children.length) pyramid.appendChild(teacherRow);
+
+        slide.appendChild(pyramid);
+        container.appendChild(slide);
+      });
+
+      showSlide(0);
+    }
+
+    function showSlide(i) {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach(s => s.classList.remove('active'));
+      slides[i].classList.add('active');
+      document.getElementById('dateRange').textContent = slides[i].dataset.range;
+    }
+
+    function nextSlide() {
+      const slides = document.querySelectorAll('.slide');
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    }
+
+    function prevSlide() {
+      const slides = document.querySelectorAll('.slide');
+      current = (current - 1 + slides.length) % slides.length;
+      showSlide(current);
+    }
+
+    loadStaff();
+
+    // ==== ЗВЁЗДЫ ====
+    const starCanvas = document.getElementById('stars');
+    const ctx = starCanvas.getContext('2d');
+    let stars = [];
+    const colors = ["#ffffff", "#ffe9c4", "#d4fbff", "#ffd1dc", "#cfd9ff"]; // белые, желтоватые, голубые, розоватые
+
+    function resizeStars() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+      const n = Math.floor((window.innerWidth * window.innerHeight) / 8000);
+      stars = Array.from({ length: n }, () => ({
+        x: Math.random() * starCanvas.width,
+        y: Math.random() * starCanvas.height,
+        r: Math.random() * 1.8 + 0.5,
+        dx: (Math.random() - 0.5) * 0.15,
+        dy: (Math.random() - 0.5) * 0.15,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        twinkle: Math.random() * 100
+      }));
+    }
+    window.addEventListener('resize', resizeStars);
+    resizeStars();
+
+    function drawStars() {
+      ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      for (const s of stars) {
+        s.x += s.dx;
+        s.y += s.dy;
+
+        // выход за экран → перенос на другую сторону
+        if (s.x < 0) s.x = starCanvas.width;
+        if (s.x > starCanvas.width) s.x = 0;
+        if (s.y < 0) s.y = starCanvas.height;
+        if (s.y > starCanvas.height) s.y = 0;
+
+        // мерцание
+        s.twinkle += 0.05 + Math.random() * 0.02;
+        const alpha = 0.5 + 0.5 * Math.sin(s.twinkle);
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function animateStars() {
+      drawStars();
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+  </script>
+
 </body>
+
 </html>
