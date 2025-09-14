@@ -2,24 +2,33 @@
 <html lang="ru">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Университет RPM West</title>
-  <link rel="icon" href="img/UniLogo.png" type="image/png">
+  <link rel="icon" href="img/UniLogo.png" type="image/png" />
   <style>
-    #stars {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: transparent;
-    }
-
     :root {
+      /* базовые переменные (будут переопределяться при смене темы) */
       --bg: #0f1115;
       --card: #171924;
       --text: #e7e9ee;
       --muted: #a7adbb;
       --accent: #5b9cff;
+      --button-grad-start: #5b9cff;
+      --button-grad-end: #3a7add;
+      --img-border: #2b2f45;
+      --header-bg: #171924;
+      --footer-bg: #141828;
+      --dean-border-grad: conic-gradient(from 0deg, red, orange, red);
+      --teacher-shadow: 0 6px 20px rgba(0, 0, 0, .3);
+    }
+
+    /* фон / звезды контейнер */
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: transparent;
     }
 
     body {
@@ -30,16 +39,18 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      transition: background 0.6s ease, color 0.4s ease;
     }
 
     header {
-      background: #171924;
+      background: var(--header-bg);
       padding: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
       flex-wrap: wrap;
+      transition: background 0.4s ease;
     }
 
     header h1 {
@@ -52,15 +63,16 @@
     }
 
     nav a {
-      color: #f1f1f1;
+      color: var(--text);
       text-decoration: none;
       margin: 6px 12px;
       font-weight: bold;
       display: inline-block;
+      transition: color .25s;
     }
 
     nav a:hover {
-      color: #ffcc66;
+      color: var(--accent);
     }
 
     main {
@@ -95,8 +107,8 @@
       border-radius: 16px;
       padding: 12px;
       width: 160px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, .3);
-      transition: transform 0.3s;
+      box-shadow: var(--teacher-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .teacher:hover {
@@ -109,22 +121,25 @@
       object-fit: cover;
       object-position: top;
       border-radius: 12px;
-      border: 2px solid #2b2f45;
+      border: 2px solid var(--img-border);
+      transition: border-color .3s, box-shadow .3s;
     }
 
     .name {
       margin-top: 10px;
-      background: #141828;
+      background: rgba(0, 0, 0, 0.08);
       border-radius: 10px;
       padding: 6px;
       font-size: 14px;
+      color: var(--text);
+      transition: background .3s;
     }
 
     .dean {
       position: relative;
       border: 4px solid transparent;
       border-radius: 16px;
-      background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 0deg, red, orange, red) border-box;
+      background: linear-gradient(var(--card), var(--card)) padding-box, var(--dean-border-grad) border-box;
       animation: spinBorder 6s linear infinite;
     }
 
@@ -134,11 +149,11 @@
 
     @keyframes spinBorder {
       0% {
-        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 0deg, red, orange, red) border-box;
+        background: linear-gradient(var(--card), var(--card)) padding-box, var(--dean-border-grad);
       }
 
       100% {
-        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 360deg, red, orange, red) border-box;
+        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 360deg, red, orange, red);
       }
     }
 
@@ -183,7 +198,7 @@
     }
 
     .controls button {
-      background: linear-gradient(135deg, #5b9cff, #3a7add);
+      background: linear-gradient(135deg, var(--button-grad-start), var(--button-grad-end));
       color: #fff;
       border: none;
       padding: 10px 20px;
@@ -196,17 +211,16 @@
     }
 
     .controls button:hover {
-      background: linear-gradient(135deg, #6baeff, #4a8dff);
+      filter: brightness(1.05);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(91, 156, 255, .6);
     }
 
     .controls button:active {
       transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(91, 156, 255, .4);
+      box-shadow: 0 2px 6px rgba(0,0,0, .4);
     }
 
-    @media(max-width:599px) {
+    @media (max-width: 599px) {
       .row {
         gap: 10px;
       }
@@ -242,20 +256,37 @@
         margin: 8px;
         font-size: 15px;
       }
-
     }
 
     footer {
-      background: #141828;
-      border-top: 1px solid #23273a;
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(255,255,255,0.03);
       padding: 20px;
       text-align: center;
+      transition: background .4s ease;
+    }
+
+    /* маленький индикатор темы в правом верхнем углу (не навязчивый) */
+    .theme-indicator {
+      position: fixed;
+      right: 16px;
+      top: 14px;
+      background: rgba(0,0,0,0.25);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text);
+      backdrop-filter: blur(4px);
+      z-index: 50;
     }
   </style>
 </head>
 
 <body>
   <canvas id="stars"></canvas>
+
+  <div class="theme-indicator" id="themeIndicator">theme: default</div>
+
   <header>
     <h1>Университет RPM</h1>
     <nav>
@@ -265,6 +296,7 @@
       <a href="teacherlist.html">Сотрудники</a>
     </nav>
   </header>
+
   <main>
     <h2>Сотрудники</h2>
     <div class="date-range" id="dateRange"></div>
@@ -275,55 +307,113 @@
       <button onclick="prevSlide()">⬅ Назад</button>
       <button onclick="nextSlide()">Вперед ➡</button>
     </div>
-
   </main>
 
   <footer>
     <p>© 2025 Университет RPM</p>
   </footer>
+
   <script>
-    const themes = {
-      cosmos: {
-        vars: {
-          "--bg": "#0f1115",
-          "--card": "#171924",
-          "--text": "#e7e9ee",
-          "--muted": "#a7adbb",
-          "--accent": "#5b9cff",
-          "--photo-border": "2px solid #5b9cff",
-          "--btn-bg": "linear-gradient(135deg,#5b9cff,#3a7add)"
-        },
-        stars: { type: "stars", colors: ["#ffffff", "#d4fbff", "#ffe9c4"] }
-      },
+    let current = 0;
+
+    // порядок тем: по индексу слайда
+    const themeOrder = ['neon', 'fire', 'forest', 'water'];
+
+    // определения тем — задают CSS-переменные и параметры звёзд
+    const THEMES = {
       neon: {
         vars: {
-          "--bg": "#050010",
-          "--card": "#0f001f",
-          "--text": "#e0fffc",
-          "--muted": "#7fffff",
-          "--accent": "#ff00cc",
-          "--photo-border": "2px solid #ff00cc",
-          "--btn-bg": "linear-gradient(135deg,#ff00cc,#00ffff)"
+          '--bg': '#071026',
+          '--card': 'linear-gradient(180deg,#081324,#0b1530)',
+          '--text': '#e6f7ff',
+          '--muted': '#9ad1ff',
+          '--accent': '#7effc7',
+          '--button-grad-start': '#8b5cff',
+          '--button-grad-end': '#00f0ff',
+          '--img-border': '#2bffea',
+          '--header-bg': 'linear-gradient(90deg,#071026,#0b1a36)',
+          '--footer-bg': '#071022',
+          '--dean-border-grad': 'conic-gradient(from 0deg,#ff00d0,#6effff,#ff00d0)',
+          '--teacher-shadow': '0 10px 30px rgba(100,255,230,0.06)'
         },
-        stars: { type: "squares", colors: ["#ff00cc", "#00ffff", "#ffff00"] }
+        stars: {
+          colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'],
+          densityDivisor: 12000,
+          speed: 0.25,
+          twinkleSpeed: 0.12
+        }
       },
       fire: {
         vars: {
-          "--bg": "#1a0f0f",
-          "--card": "#2a1810",
-          "--text": "#ffe5cc",
-          "--muted": "#ffb38a",
-          "--accent": "#ff4500",
-          "--photo-border": "2px solid #ff4500",
-          "--btn-bg": "linear-gradient(135deg,#ff7b00,#ff0000)"
+          '--bg': 'linear-gradient(180deg,#2b0a00,#120502)',
+          '--card': 'linear-gradient(180deg,#2a0c00,#1a0700)',
+          '--text': '#ffeedd',
+          '--muted': '#f7b07a',
+          '--accent': '#ff7a2d',
+          '--button-grad-start': '#ff6a00',
+          '--button-grad-end': '#ff2d00',
+          '--img-border': '#ae2b00',
+          '--header-bg': '#31110a',
+          '--footer-bg': '#1a0703',
+          '--dean-border-grad': 'conic-gradient(from 0deg,#ffb347,#ff6a00,#ff3d00)',
+          '--teacher-shadow': '0 8px 26px rgba(255,120,40,0.08)'
         },
-        stars: { type: "flames", colors: ["#ff4500", "#ff7b00", "#ffff66"] }
+        stars: {
+          colors: ['#ffd1a9', '#ff7a2d', '#ffd9c4'],
+          densityDivisor: 9000,
+          speed: 0.35,
+          twinkleSpeed: 0.2
+        }
+      },
+      forest: {
+        vars: {
+          '--bg': 'linear-gradient(180deg,#031006,#081814)',
+          '--card': 'linear-gradient(180deg,#072216,#0b2b1d)',
+          '--text': '#e6ffee',
+          '--muted': '#9cd8b6',
+          '--accent': '#6bf08c',
+          '--button-grad-start': '#2fb86b',
+          '--button-grad-end': '#0c9a6b',
+          '--img-border': '#145d2f',
+          '--header-bg': '#02140d',
+          '--footer-bg': '#031612',
+          '--dean-border-grad': 'conic-gradient(from 0deg,#4be67a,#0ab36b,#1fb35f)',
+          '--teacher-shadow': '0 8px 22px rgba(6,120,80,0.06)'
+        },
+        stars: {
+          colors: ['#9ff2c6', '#d4f7e6', '#7ef0a3'],
+          densityDivisor: 14000,
+          speed: 0.12,
+          twinkleSpeed: 0.06
+        }
+      },
+      water: {
+        vars: {
+          '--bg': 'linear-gradient(180deg,#002039,#00172b)',
+          '--card': 'linear-gradient(180deg,#022432,#001b2a)',
+          '--text': '#dff6ff',
+          '--muted': '#a7d6e6',
+          '--accent': '#47c7ff',
+          '--button-grad-start': '#3aaaff',
+          '--button-grad-end': '#0077ff',
+          '--img-border': '#0a8bbd',
+          '--header-bg': 'linear-gradient(90deg,#001b2f,#003a55)',
+          '--footer-bg': '#001a28',
+          '--dean-border-grad': 'conic-gradient(from 0deg,#7be1ff,#0aa2ff,#7be1ff)',
+          '--teacher-shadow': '0 8px 24px rgba(20,140,200,0.06)'
+        },
+        stars: {
+          colors: ['#cfefff', '#a7e7ff', '#d4f9ff'],
+          densityDivisor: 11000,
+          speed: 0.18,
+          twinkleSpeed: 0.08
+        }
       }
     };
-    let currentStarMode = { type: "stars", colors: ["#fff"] };
 
-
-    let current = 0;
+    // активная тема (будет переписываться)
+    let currentThemeName = 'neon';
+    let starSettings = THEMES.neon.stars;
 
     async function loadStaff() {
       const res = await fetch('staff.json');
@@ -338,20 +428,27 @@
         const pyramid = document.createElement('div');
         pyramid.classList.add('pyramid');
 
-        const deanRow = document.createElement('div'); deanRow.classList.add('row');
-        const zamRow = document.createElement('div'); zamRow.classList.add('row');
-        const teacherRow = document.createElement('div'); teacherRow.classList.add('row');
+        const deanRow = document.createElement('div');
+        deanRow.classList.add('row');
+        const zamRow = document.createElement('div');
+        zamRow.classList.add('row');
+        const teacherRow = document.createElement('div');
+        teacherRow.classList.add('row');
 
         period.staff.forEach(person => {
-          const div = document.createElement('div'); div.classList.add('teacher');
+          const div = document.createElement('div');
+          div.classList.add('teacher');
           if (person.role === 'dean') div.classList.add('dean');
           if (person.role === 'zam') div.classList.add('zam');
 
-          const img = document.createElement('img'); img.src = person.img; img.alt = person.name;
+          const img = document.createElement('img');
+          img.src = person.img;
+          img.alt = person.name;
           img.onerror = () => img.src = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Question_book-new.svg';
           div.appendChild(img);
 
-          const nameDiv = document.createElement('div'); nameDiv.classList.add('name');
+          const nameDiv = document.createElement('div');
+          nameDiv.classList.add('name');
           nameDiv.innerHTML = person.name + (person.role === 'dean' ? '<br>(Декан)' : person.role === 'zam' ? '<br>(Зам. декана)' : '');
           div.appendChild(nameDiv);
 
@@ -371,54 +468,76 @@
       showSlide(0);
     }
 
+    function applyTheme(themeName) {
+      const theme = THEMES[themeName];
+      if (!theme) return;
+      currentThemeName = themeName;
+      // применяем CSS-переменные
+      const root = document.documentElement;
+      Object.entries(theme.vars).forEach(([k, v]) => {
+        root.style.setProperty(k, v);
+      });
+      // обновляем индикатор
+      const indicator = document.getElementById('themeIndicator');
+      indicator.textContent = 'theme: ' + themeName;
+      // обновляем настройки звёзд и пересоздаём их
+      starSettings = theme.stars;
+      resizeStars(); // пересоздаём массив звёзд с новыми параметрами
+      // немного подправить тени кнопок в зависимости от темы (косвенно)
+      document.querySelectorAll('.controls button').forEach(btn => {
+        btn.style.boxShadow = `0 4px 12px rgba(0,0,0,0.15)`;
+      });
+    }
+
     function showSlide(i) {
       const slides = document.querySelectorAll('.slide');
+      if (!slides.length) return;
       slides.forEach(s => s.classList.remove('active'));
+      // защититься от выхода за границы
+      i = ((i % slides.length) + slides.length) % slides.length;
       slides[i].classList.add('active');
       document.getElementById('dateRange').textContent = slides[i].dataset.range;
-      const themeName = window.staffData[i].theme;
-      if (themeName && themes[themeName]) {
-        const theme = themes[themeName];
-        for (const [k, v] of Object.entries(theme.vars)) {
-          document.documentElement.style.setProperty(k, v);
-        }
-        currentStarMode = theme.stars;
-        resizeStars();
-      }
+      // Подбираем тему по индексу слайда (циклично через themeOrder)
+      const themeName = themeOrder[i % themeOrder.length] || 'neon';
+      applyTheme(themeName);
+      current = i;
     }
 
     function nextSlide() {
       const slides = document.querySelectorAll('.slide');
+      if (!slides.length) return;
       current = (current + 1) % slides.length;
       showSlide(current);
     }
 
     function prevSlide() {
       const slides = document.querySelectorAll('.slide');
+      if (!slides.length) return;
       current = (current - 1 + slides.length) % slides.length;
       showSlide(current);
     }
 
     loadStaff();
 
-    // ==== ЗВЁЗДЫ ====
+    // ==== ЗВЁЗДЫ / canvas ====
     const starCanvas = document.getElementById('stars');
     const ctx = starCanvas.getContext('2d');
     let stars = [];
-    const colors = ["#ffffff", "#ffe9c4", "#d4fbff", "#ffd1dc", "#cfd9ff"]; // белые, желтоватые, голубые, розоватые
 
     function resizeStars() {
       starCanvas.width = window.innerWidth;
       starCanvas.height = window.innerHeight;
-      const n = Math.floor((window.innerWidth * window.innerHeight) / 8000);
+      // количество звёзд — зависит от плотности в текущей теме
+      const n = Math.floor((window.innerWidth * window.innerHeight) / (starSettings.densityDivisor || 10000));
       stars = Array.from({ length: n }, () => ({
         x: Math.random() * starCanvas.width,
         y: Math.random() * starCanvas.height,
-        r: Math.random() * 1.8 + 0.5,
-        dx: (Math.random() - 0.5) * 0.15,
-        dy: (Math.random() - 0.5) * 0.15,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        twinkle: Math.random() * 100
+        r: Math.random() * 1.8 + 0.4,
+        dx: (Math.random() - 0.5) * (starSettings.speed || 0.15),
+        dy: (Math.random() - 0.5) * (starSettings.speed || 0.15),
+        color: starSettings.colors[Math.floor(Math.random() * starSettings.colors.length)],
+        twinkle: Math.random() * 100,
+        spin: Math.random() * Math.PI * 2
       }));
     }
     window.addEventListener('resize', resizeStars);
@@ -427,46 +546,55 @@
     function drawStars() {
       ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
 
+      // мягкий фон-градиент под звёздами, немного завуалирует резкий фон (использует CSS-переменные)
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, starCanvas.height);
+      // читаем текущие CSS-bg, для сложных gradienв — не будем парсить; задаём прозрачный overlay
+      bgGrad.addColorStop(0, 'rgba(0,0,0,0)');
+      bgGrad.addColorStop(1, 'rgba(0,0,0,0.05)');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+
       for (const s of stars) {
         s.x += s.dx;
         s.y += s.dy;
 
+        // выход за экран → перенос на другую сторону
         if (s.x < 0) s.x = starCanvas.width;
         if (s.x > starCanvas.width) s.x = 0;
         if (s.y < 0) s.y = starCanvas.height;
         if (s.y > starCanvas.height) s.y = 0;
 
-        s.twinkle += 0.05 + Math.random() * 0.02;
-        const alpha = 0.5 + 0.5 * Math.sin(s.twinkle);
+        // мерцание — использует настройку темы
+        s.twinkle += (starSettings.twinkleSpeed || 0.05) + Math.random() * 0.02;
+        const alpha = 0.4 + 0.6 * Math.sin(s.twinkle);
 
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = s.color;
+        // небольшое "пульсирование" радиуса
+        const rr = s.r * (0.8 + 0.4 * Math.abs(Math.sin(s.twinkle / 2)));
 
-        if (currentStarMode.type === "stars") {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (currentStarMode.type === "squares") {
-          ctx.fillRect(s.x, s.y, s.r * 2, s.r * 2);
-        } else if (currentStarMode.type === "flames") {
-          ctx.beginPath();
-          ctx.moveTo(s.x, s.y - s.r);
-          ctx.lineTo(s.x + s.r, s.y + s.r);
-          ctx.lineTo(s.x - s.r, s.y + s.r);
-          ctx.closePath();
-          ctx.fill();
-        } else if (currentStarMode.type === "circles") {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r * 2, 0, Math.PI * 2);
-          ctx.fill();
+        ctx.beginPath();
+        // разные формы — водяные звезды мягкие, неон — чуть более яркие круги
+        if (currentThemeName === 'forest' || currentThemeName === 'water') {
+          ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
         } else {
-          ctx.fillRect(s.x, s.y, 2, 2);
+          // neon/fire: добавить маленькую звезду с крестом (лучи)
+          ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
         }
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+
+        // для неон-темы — добавить faint glow
+        if (currentThemeName === 'neon') {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, rr * 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = alpha * 0.035;
+          ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
       }
-
-      ctx.globalAlpha = 1;
     }
-
 
     function animateStars() {
       drawStars();
@@ -474,7 +602,6 @@
     }
     animateStars();
   </script>
-
 </body>
 
 </html>
