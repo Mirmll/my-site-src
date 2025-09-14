@@ -8,7 +8,6 @@
   <link rel="icon" href="img/UniLogo.png" type="image/png" />
   <style>
     :root {
-      /* базовые переменные (будут переопределяться при смене темы) */
       --bg: #0f1115;
       --card: #171924;
       --text: #e7e9ee;
@@ -23,7 +22,6 @@
       --teacher-shadow: 0 6px 20px rgba(0, 0, 0, .3);
     }
 
-    /* фон / звезды контейнер */
     #stars {
       position: fixed;
       inset: 0;
@@ -137,24 +135,20 @@
 
     .dean {
       position: relative;
-      border: 4px solid;
+      border: 4px solid red;
       border-radius: 16px;
-      background: linear-gradient(var(--card), var(--card)) padding-box, var(--dean-border-grad) border-box;
-      animation: spinBorder 6s linear infinite;
+      box-shadow: 0 0 20px red;
+      animation: pulseRed 2s infinite;
+    }
+
+    @keyframes pulseRed {
+      0% { box-shadow: 0 0 10px red; }
+      50% { box-shadow: 0 0 30px red; }
+      100% { box-shadow: 0 0 10px red; }
     }
 
     .dean img {
-      border: 3px solid rgb(101, 37, 37);
-    }
-
-    @keyframes spinBorder {
-      0% {
-        background: linear-gradient(var(--card), var(--card)) padding-box, var(--dean-border-grad);
-      }
-
-      100% {
-        background: linear-gradient(var(--card), var(--card)) padding-box, conic-gradient(from 360deg, red, orange, red);
-      }
+      border: 3px solid red;
     }
 
     .zam {
@@ -167,21 +161,15 @@
 
     .slide {
       display: none;
-      animation: fade 0.5s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
     .slide.active {
       display: block;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .date-range {
@@ -221,41 +209,14 @@
     }
 
     @media (max-width: 599px) {
-      .row {
-        gap: 10px;
-      }
-
-      .teacher {
-        width: 90px;
-        padding: 6px;
-      }
-
-      .teacher img {
-        height: 90px;
-      }
-
-      .name {
-        font-size: 12px;
-        padding: 4px;
-      }
-
-      body {
-        font-size: 15px;
-      }
-
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      nav {
-        margin-top: 12px;
-      }
-
-      nav a {
-        margin: 8px;
-        font-size: 15px;
-      }
+      .row { gap: 10px; }
+      .teacher { width: 90px; padding: 6px; }
+      .teacher img { height: 90px; }
+      .name { font-size: 12px; padding: 4px; }
+      body { font-size: 15px; }
+      header { flex-direction: column; text-align: center; }
+      nav { margin-top: 12px; }
+      nav a { margin: 8px; font-size: 15px; }
     }
 
     footer {
@@ -266,7 +227,6 @@
       transition: background .4s ease;
     }
 
-    /* маленький индикатор темы в правом верхнем углу (не навязчивый) */
     .theme-indicator {
       position: fixed;
       right: 16px;
@@ -284,7 +244,6 @@
 
 <body>
   <canvas id="stars"></canvas>
-
   <header>
     <h1>Университет RPM</h1>
     <nav>
@@ -298,9 +257,7 @@
   <main>
     <h2>Сотрудники</h2>
     <div class="date-range" id="dateRange"></div>
-
     <div id="slidesContainer"></div>
-
     <div class="controls">
       <button onclick="prevSlide()">⬅ Назад</button>
       <button onclick="nextSlide()">Вперед ➡</button>
@@ -313,131 +270,38 @@
 
   <script>
     let current = 0;
-
-    const themeOrder = ['neon', 'fire', 'forest', 'water'];
-
-    const RANGE_THEME_MAP = {
-    };
+    const themeOrder = ['neon', 'fire', 'forest', 'water', 'violet'];
+    const RANGE_THEME_MAP = {};
 
     function getThemeForRange(rangeText) {
       if (!rangeText) return null;
-      // 1) точное совпадение
       for (const key of Object.keys(RANGE_THEME_MAP)) {
         if (key.startsWith('re:')) continue;
         if (rangeText.trim() === key) return RANGE_THEME_MAP[key];
       }
-      // 2) подстрока (includes)
       for (const key of Object.keys(RANGE_THEME_MAP)) {
         if (key.startsWith('re:')) continue;
         if (rangeText.includes(key)) return RANGE_THEME_MAP[key];
       }
-      // 3) регулярные выражения (ключи начинаются с "re:")
       for (const key of Object.keys(RANGE_THEME_MAP)) {
         if (!key.startsWith('re:')) continue;
         const pattern = key.slice(3);
         try {
           const re = new RegExp(pattern, 'i');
           if (re.test(rangeText)) return RANGE_THEME_MAP[key];
-        } catch (err) {
-          console.warn('Invalid RANGE_THEME_MAP regex key:', key);
-        }
+        } catch (err) {}
       }
       return null;
     }
 
-    // определения тем — задают CSS-переменные и параметры звёзд
     const THEMES = {
-      neon: {
-        vars: {
-          '--bg': '#071026',
-          '--card': 'linear-gradient(180deg,#081324,#0b1530)',
-          '--text': '#e6f7ff',
-          '--muted': '#9ad1ff',
-          '--accent': '#7effc7',
-          '--button-grad-start': '#8b5cff',
-          '--button-grad-end': '#00f0ff',
-          '--img-border': '#2bffea',
-          '--header-bg': 'linear-gradient(90deg,#071026,#0b1a36)',
-          '--footer-bg': '#071022',
-          '--dean-border-grad': 'conic-gradient(from 0deg,#ff00d0,#6effff,#ff00d0)',
-          '--teacher-shadow': '0 10px 30px rgba(100,255,230,0.06)'
-        },
-        stars: {
-          colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'],
-          densityDivisor: 12000,
-          speed: 0.35,
-          twinkleSpeed: 0.01
-        }
-      },
-      fire: {
-        vars: {
-          '--bg': 'linear-gradient(180deg,#2b0a00,#120502)',
-          '--card': 'linear-gradient(180deg,#2a0c00,#1a0700)',
-          '--text': '#ffeedd',
-          '--muted': '#f7b07a',
-          '--accent': '#ff7a2d',
-          '--button-grad-start': '#ff6a00',
-          '--button-grad-end': '#ff2d00',
-          '--img-border': '#ae2b00',
-          '--header-bg': '#31110a',
-          '--footer-bg': '#1a0703',
-          '--dean-border-grad': 'conic-gradient(from 0deg,#ffb347,#ff6a00,#ff3d00)',
-          '--teacher-shadow': '0 8px 26px rgba(255,120,40,0.08)'
-        },
-        stars: {
-          colors: ['#ffd1a9', '#ff7a2d', '#ffd9c4'],
-          densityDivisor: 9000,
-          speed: 0.10,
-          twinkleSpeed: 0.002
-        }
-      },
-      forest: {
-        vars: {
-          '--bg': 'linear-gradient(180deg,#031006,#081814)',
-          '--card': 'linear-gradient(180deg,#072216,#0b2b1d)',
-          '--text': '#e6ffee',
-          '--muted': '#9cd8b6',
-          '--accent': '#6bf08c',
-          '--button-grad-start': '#2fb86b',
-          '--button-grad-end': '#0c9a6b',
-          '--img-border': '#145d2f',
-          '--header-bg': '#02140d',
-          '--footer-bg': '#031612',
-          '--dean-border-grad': 'conic-gradient(from 0deg,#4be67a,#0ab36b,#1fb35f)',
-          '--teacher-shadow': '0 8px 22px rgba(6,120,80,0.06)'
-        },
-        stars: {
-          colors: ['#9ff2c6', '#d4f7e6', '#7ef0a3'],
-          densityDivisor: 14000,
-          speed: 0.12,
-          twinkleSpeed: 0.01
-        }
-      },
-      water: {
-        vars: {
-          '--bg': 'linear-gradient(180deg,#002039,#00172b)',
-          '--card': 'linear-gradient(180deg,#022432,#001b2a)',
-          '--text': '#dff6ff',
-          '--muted': '#a7d6e6',
-          '--accent': '#47c7ff',
-          '--button-grad-start': '#3aaaff',
-          '--button-grad-end': '#0077ff',
-          '--img-border': '#0a8bbd',
-          '--header-bg': 'linear-gradient(90deg,#001b2f,#003a55)',
-          '--footer-bg': '#001a28',
-          '--dean-border-grad': 'conic-gradient(from 0deg,#7be1ff,#0aa2ff,#7be1ff)',
-          '--teacher-shadow': '0 8px 24px rgba(20,140,200,0.06)'
-        },
-        stars: {
-          colors: ['#cfefff', '#a7e7ff', '#d4f9ff'],
-          densityDivisor: 11000,
-          speed: 0.18,
-          twinkleSpeed: 0.01
-        }
-      }
+      neon: { vars: { '--bg': '#071026', '--card': 'linear-gradient(180deg,#081324,#0b1530)', '--text': '#e6f7ff', '--muted': '#9ad1ff', '--accent': '#7effc7', '--button-grad-start': '#8b5cff', '--button-grad-end': '#00f0ff', '--img-border': '#2bffea', '--header-bg': 'linear-gradient(90deg,#071026,#0b1a36)', '--footer-bg': '#071022', '--teacher-shadow': '0 10px 30px rgba(100,255,230,0.06)'}, stars: {colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'], densityDivisor: 12000, speed: 0.35, twinkleSpeed: 0.01}},
+      fire: { vars: { '--bg': 'linear-gradient(180deg,#2b0a00,#120502)', '--card': 'linear-gradient(180deg,#2a0c00,#1a0700)', '--text': '#ffeedd', '--muted': '#f7b07a', '--accent': '#ff7a2d', '--button-grad-start': '#ff6a00', '--button-grad-end': '#ff2d00', '--img-border': '#ae2b00', '--header-bg': '#31110a', '--footer-bg': '#1a0703', '--teacher-shadow': '0 8px 26px rgba(255,120,40,0.08)'}, stars: {colors: ['#ffd1a9', '#ff7a2d', '#ffd9c4'], densityDivisor: 9000, speed: 0.10, twinkleSpeed: 0.002}},
+      forest: { vars: { '--bg': 'linear-gradient(180deg,#031006,#081814)', '--card': 'linear-gradient(180deg,#072216,#0b2b1d)', '--text': '#e6ffee', '--muted': '#9cd8b6', '--accent': '#6bf08c', '--button-grad-start': '#2fb86b', '--button-grad-end': '#0c9a6b', '--img-border': '#145d2f', '--header-bg': '#02140d', '--footer-bg': '#031612', '--teacher-shadow': '0 8px 22px rgba(6,120,80,0.06)'}, stars: {colors: ['#9ff2c6', '#d4f7e6', '#7ef0a3'], densityDivisor: 14000, speed: 0.12, twinkleSpeed: 0.01}},
+      water: { vars: { '--bg': 'linear-gradient(180deg,#002039,#00172b)', '--card': 'linear-gradient(180deg,#022432,#001b2a)', '--text': '#dff6ff', '--muted': '#a7d6e6', '--accent': '#47c7ff', '--button-grad-start': '#3aaaff', '--button-grad-end': '#0077ff', '--img-border': '#0a8bbd', '--header-bg': 'linear-gradient(90deg,#001b2f,#003a55)', '--footer-bg': '#001a28', '--teacher-shadow': '0 8px 24px rgba(20,140,200,0.06)'}, stars: {colors: ['#cfefff', '#a7e7ff', '#d4f9ff'], densityDivisor: 11000, speed: 0.18, twinkleSpeed: 0.01}},
+      violet: { vars: { '--bg': 'linear-gradient(180deg,#1a0033,#0d001a)', '--card': 'linear-gradient(180deg,#2a004d,#1a0033)', '--text': '#f0e6ff', '--muted': '#c7a7ff', '--accent': '#a64dff', '--button-grad-start': '#b366ff', '--button-grad-end': '#6600cc', '--img-border': '#9933ff', '--header-bg': 'linear-gradient(90deg,#2a004d,#1a0033)', '--footer-bg': '#0d001a', '--teacher-shadow': '0 8px 24px rgba(160,60,255,0.08)'}, stars: {colors: ['#d9b3ff', '#c280ff', '#f2e6ff'], densityDivisor: 13000, speed: 0.15, twinkleSpeed: 0.01}}
     };
 
-    // активная тема (будет переписываться)
     let currentThemeName = 'neon';
     let starSettings = THEMES.neon.stars;
 
@@ -445,166 +309,96 @@
       const res = await fetch('staff.json');
       const data = await res.json();
       const container = document.getElementById('slidesContainer');
-
       data.forEach(period => {
         const slide = document.createElement('div');
         slide.classList.add('slide');
         slide.dataset.range = period.range || '';
-        // если в staff.json есть поле theme для периода, запомним его (приоритет над RANGE_THEME_MAP)
         if (period.theme) slide.dataset.theme = period.theme;
-
         const pyramid = document.createElement('div');
         pyramid.classList.add('pyramid');
-
         const deanRow = document.createElement('div');
         deanRow.classList.add('row');
         const zamRow = document.createElement('div');
         zamRow.classList.add('row');
         const teacherRow = document.createElement('div');
         teacherRow.classList.add('row');
-
         period.staff.forEach(person => {
           const div = document.createElement('div');
           div.classList.add('teacher');
           if (person.role === 'dean') div.classList.add('dean');
           if (person.role === 'zam') div.classList.add('zam');
-
           const img = document.createElement('img');
           img.src = person.img;
           img.alt = person.name;
           img.onerror = () => img.src = 'https://upload.wikimedia.org/wikipedia/commons/9/99/Question_book-new.svg';
           div.appendChild(img);
-
           const nameDiv = document.createElement('div');
           nameDiv.classList.add('name');
           nameDiv.innerHTML = person.name + (person.role === 'dean' ? '<br>(Декан)' : person.role === 'zam' ? '<br>(Зам. декана)' : '');
           div.appendChild(nameDiv);
-
           if (person.role === 'dean') deanRow.appendChild(div);
           else if (person.role === 'zam') zamRow.appendChild(div);
           else teacherRow.appendChild(div);
         });
-
         pyramid.appendChild(deanRow);
         if (zamRow.children.length) pyramid.appendChild(zamRow);
         if (teacherRow.children.length) pyramid.appendChild(teacherRow);
-
         slide.appendChild(pyramid);
         container.appendChild(slide);
       });
-
       showSlide(0);
     }
 
     function applyTheme(themeName) {
-      const theme = THEMES[themeName];
-      if (!theme) return;
-      currentThemeName = themeName;
-      const root = document.documentElement;
-      Object.entries(theme.vars).forEach(([k, v]) => {
-        root.style.setProperty(k, v);
-      });
-      starSettings = theme.stars;
-      resizeStars();
-      document.querySelectorAll('.controls button').forEach(btn => {
-        btn.style.boxShadow = `0 4px 12px rgba(0,0,0,0.15)`;
-      });
-    }
+  const theme = themes[themeName];
+  if (!theme) return;
 
-    function showSlide(i) {
-      const slides = document.querySelectorAll('.slide');
-      if (!slides.length) return;
-      slides.forEach(s => s.classList.remove('active'));
-      i = ((i % slides.length) + slides.length) % slides.length;
-      slides[i].classList.add('active');
-      const rangeText = slides[i].dataset.range || '';
-      document.getElementById('dateRange').textContent = rangeText;
+  document.body.style.background = theme.background;
+  document.body.style.color = theme.text;
 
-      const explicitTheme = slides[i].dataset.theme || null;
-      const mappedTheme = explicitTheme ? explicitTheme : getThemeForRange(rangeText);
-      const themeName = mappedTheme || themeOrder[i % themeOrder.length] || 'neon';
-      applyTheme(themeName);
+  document.querySelectorAll(".staff-card").forEach((card) => {
+    card.style.background = theme.card;
+    card.style.borderColor = theme.border;
+    card.style.color = theme.text;
+  });
 
-      current = i;
-    }
+  document.querySelectorAll(".dean").forEach((dean) => {
+    dean.style.border = `3px solid ${theme.deanBorder}`;
+  });
 
-    function nextSlide() {
-      const slides = document.querySelectorAll('.slide');
-      if (!slides.length) return;
-      current = (current + 1) % slides.length;
-      showSlide(current);
-    }
+  document.querySelectorAll(".star").forEach((star) => {
+    star.style.color = theme.star;
+  });
+}
 
-    function prevSlide() {
-      const slides = document.querySelectorAll('.slide');
-      if (!slides.length) return;
-      current = (current - 1 + slides.length) % slides.length;
-      showSlide(current);
-    }
+function switchRange(range) {
+  const container = document.getElementById("staff-container");
+  container.classList.add("slide-out");
+  setTimeout(() => {
+    renderStaff(range);
+    container.classList.remove("slide-out");
+    container.classList.add("slide-in");
+    setTimeout(() => container.classList.remove("slide-in"), 500);
+  }, 500);
+}
 
-    loadStaff();
+function renderStaff(range) {
+  const container = document.getElementById("staff-container");
+  container.innerHTML = "";
+  staffData[range].forEach((member) => {
+    const card = document.createElement("div");
+    card.className = "staff-card";
+    if (member.role === "Декан") card.classList.add("dean");
 
-    // ==== ЗВЁЗДЫ / canvas ====
-    const starCanvas = document.getElementById('stars');
-    const ctx = starCanvas.getContext('2d');
-    let stars = [];
+    card.innerHTML = `
+      <h3>${member.name}</h3>
+      <p>${member.role}</p>
+      <div class="stars">${"★".repeat(member.stars)}</div>
+    `;
 
-    function resizeStars() {
-      starCanvas.width = window.innerWidth;
-      starCanvas.height = window.innerHeight;
-      const n = Math.floor((window.innerWidth * window.innerHeight) / (starSettings.densityDivisor || 10000));
-      stars = Array.from({ length: n }, () => ({
-        x: Math.random() * starCanvas.width,
-        y: Math.random() * starCanvas.height,
-        r: Math.random() * 1.8 + 0.4,
-        dx: (Math.random() - 0.5) * (starSettings.speed || 0.15),
-        dy: (Math.random() - 0.5) * (starSettings.speed || 0.15),
-        color: starSettings.colors[Math.floor(Math.random() * starSettings.colors.length)],
-        twinkle: Math.random() * 100,
-        spin: Math.random() * Math.PI * 2
-      }));
-    }
-    window.addEventListener('resize', resizeStars);
-    resizeStars();
-
-    function drawStars() {
-      ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
-
-      const bgGrad = ctx.createLinearGradient(0, 0, 0, starCanvas.height);
-      bgGrad.addColorStop(0, 'rgba(0,0,0,0)');
-      bgGrad.addColorStop(1, 'rgba(0,0,0,0.05)');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, starCanvas.width, starCanvas.height);
-
-      for (const s of stars) {
-        s.x += s.dx;
-        s.y += s.dy;
-
-        if (s.x < 0) s.x = starCanvas.width;
-        if (s.x > starCanvas.width) s.x = 0;
-        if (s.y < 0) s.y = starCanvas.height;
-        if (s.y > starCanvas.height) s.y = 0;
-
-        s.twinkle += (starSettings.twinkleSpeed || 0.05) + Math.random() * 0.02;
-        const alpha = 0.4 + 0.6 * Math.sin(s.twinkle);
-        const rr = s.r * (0.8 + 0.4 * Math.abs(Math.sin(s.twinkle / 2)));
-
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
-        ctx.fillStyle = s.color;
-        ctx.globalAlpha = alpha;
-        ctx.fill();
-
-        ctx.globalAlpha = 1;
-      }
-    }
-
-    function animateStars() {
-      drawStars();
-      requestAnimationFrame(animateStars);
-    }
-    animateStars();
+    container.appendChild(card);
+  });
+}
   </script>
-</body>
-
+  </body>
 </html>
