@@ -606,15 +606,6 @@
         ctx.fillStyle = s.color;
         ctx.globalAlpha = alpha;
         ctx.fill();
-
-        if (currentThemeName === 'neon') {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, rr * 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = s.color;
-          ctx.globalAlpha = alpha * 0.035;
-          ctx.fill();
-        }
-
         ctx.globalAlpha = 1;
       }
     }
