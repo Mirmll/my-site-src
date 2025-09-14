@@ -319,6 +319,45 @@
     // порядок тем: по индексу слайда
     const themeOrder = ['neon', 'fire', 'forest', 'water'];
 
+    // Привязка тем к тексту range (ключи — шаблоны для поиска)
+    // Поддерживаются три типа ключей:
+    // 1) точное совпадение (range === key)
+    // 2) подстрока (range.includes(key))
+    // 3) регулярное выражение — ключ начинается с "re:" (например "re:08\\.2025|Aug")
+    const RANGE_THEME_MAP = {
+      "08.2025": "fire",
+      "09.2025": "forest",
+      "2025": "neon",
+      // пример регулярного ключа (начинается с "re:")
+      "re:Aug|Авг": "fire"
+    };
+
+    function getThemeForRange(rangeText) {
+      if (!rangeText) return null;
+      // 1) точное совпадение
+      for (const key of Object.keys(RANGE_THEME_MAP)) {
+        if (key.startsWith('re:')) continue;
+        if (rangeText.trim() === key) return RANGE_THEME_MAP[key];
+      }
+      // 2) подстрока (includes)
+      for (const key of Object.keys(RANGE_THEME_MAP)) {
+        if (key.startsWith('re:')) continue;
+        if (rangeText.includes(key)) return RANGE_THEME_MAP[key];
+      }
+      // 3) регулярные выражения (ключи начинаются с "re:")
+      for (const key of Object.keys(RANGE_THEME_MAP)) {
+        if (!key.startsWith('re:')) continue;
+        const pattern = key.slice(3);
+        try {
+          const re = new RegExp(pattern, 'i');
+          if (re.test(rangeText)) return RANGE_THEME_MAP[key];
+        } catch (err) {
+          console.warn('Invalid RANGE_THEME_MAP regex key:', key);
+        }
+      }
+      return null;
+    }
+
     // определения тем — задают CSS-переменные и параметры звёзд
     const THEMES = {
       neon: {
@@ -423,7 +462,9 @@
       data.forEach(period => {
         const slide = document.createElement('div');
         slide.classList.add('slide');
-        slide.dataset.range = period.range;
+        slide.dataset.range = period.range || '';
+        // если в staff.json есть поле theme для периода, запомним его (приоритет над RANGE_THEME_MAP)
+        if (period.theme) slide.dataset.theme = period.theme;
 
         const pyramid = document.createElement('div');
         pyramid.classList.add('pyramid');
@@ -472,18 +513,14 @@
       const theme = THEMES[themeName];
       if (!theme) return;
       currentThemeName = themeName;
-      // применяем CSS-переменные
       const root = document.documentElement;
       Object.entries(theme.vars).forEach(([k, v]) => {
         root.style.setProperty(k, v);
       });
-      // обновляем индикатор
       const indicator = document.getElementById('themeIndicator');
       indicator.textContent = 'theme: ' + themeName;
-      // обновляем настройки звёзд и пересоздаём их
       starSettings = theme.stars;
-      resizeStars(); // пересоздаём массив звёзд с новыми параметрами
-      // немного подправить тени кнопок в зависимости от темы (косвенно)
+      resizeStars();
       document.querySelectorAll('.controls button').forEach(btn => {
         btn.style.boxShadow = `0 4px 12px rgba(0,0,0,0.15)`;
       });
@@ -493,13 +530,18 @@
       const slides = document.querySelectorAll('.slide');
       if (!slides.length) return;
       slides.forEach(s => s.classList.remove('active'));
-      // защититься от выхода за границы
       i = ((i % slides.length) + slides.length) % slides.length;
       slides[i].classList.add('active');
-      document.getElementById('dateRange').textContent = slides[i].dataset.range;
-      // Подбираем тему по индексу слайда (циклично через themeOrder)
-      const themeName = themeOrder[i % themeOrder.length] || 'neon';
+      const rangeText = slides[i].dataset.range || '';
+      document.getElementById('dateRange').textContent = rangeText;
+
+      // Если slide содержит dataset.theme -> используем его (приоритет)
+      const explicitTheme = slides[i].dataset.theme || null;
+      // Иначе пробуем подобрать по RANGE_THEME_MAP
+      const mappedTheme = explicitTheme ? explicitTheme : getThemeForRange(rangeText);
+      const themeName = mappedTheme || themeOrder[i % themeOrder.length] || 'neon';
       applyTheme(themeName);
+
       current = i;
     }
 
@@ -527,7 +569,6 @@
     function resizeStars() {
       starCanvas.width = window.innerWidth;
       starCanvas.height = window.innerHeight;
-      // количество звёзд — зависит от плотности в текущей теме
       const n = Math.floor((window.innerWidth * window.innerHeight) / (starSettings.densityDivisor || 10000));
       stars = Array.from({ length: n }, () => ({
         x: Math.random() * starCanvas.width,
@@ -546,9 +587,7 @@
     function drawStars() {
       ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
 
-      // мягкий фон-градиент под звёздами, немного завуалирует резкий фон (использует CSS-переменные)
       const bgGrad = ctx.createLinearGradient(0, 0, 0, starCanvas.height);
-      // читаем текущие CSS-bg, для сложных gradienв — не будем парсить; задаём прозрачный overlay
       bgGrad.addColorStop(0, 'rgba(0,0,0,0)');
       bgGrad.addColorStop(1, 'rgba(0,0,0,0.05)');
       ctx.fillStyle = bgGrad;
@@ -558,32 +597,21 @@
         s.x += s.dx;
         s.y += s.dy;
 
-        // выход за экран → перенос на другую сторону
         if (s.x < 0) s.x = starCanvas.width;
         if (s.x > starCanvas.width) s.x = 0;
         if (s.y < 0) s.y = starCanvas.height;
         if (s.y > starCanvas.height) s.y = 0;
 
-        // мерцание — использует настройку темы
         s.twinkle += (starSettings.twinkleSpeed || 0.05) + Math.random() * 0.02;
         const alpha = 0.4 + 0.6 * Math.sin(s.twinkle);
-
-        // небольшое "пульсирование" радиуса
         const rr = s.r * (0.8 + 0.4 * Math.abs(Math.sin(s.twinkle / 2)));
 
         ctx.beginPath();
-        // разные формы — водяные звезды мягкие, неон — чуть более яркие круги
-        if (currentThemeName === 'forest' || currentThemeName === 'water') {
-          ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
-        } else {
-          // neon/fire: добавить маленькую звезду с крестом (лучи)
-          ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
-        }
+        ctx.arc(s.x, s.y, rr, 0, Math.PI * 2);
         ctx.fillStyle = s.color;
         ctx.globalAlpha = alpha;
         ctx.fill();
 
-        // для неон-темы — добавить faint glow
         if (currentThemeName === 'neon') {
           ctx.beginPath();
           ctx.arc(s.x, s.y, rr * 3.5, 0, Math.PI * 2);
