@@ -1,1 +1,47 @@
-[ { "range": "11.08.2025 – 11.09.2025", "staff": [ { "role": "dean", "img": "img/KraiperFeed3.png", "name": "Энвер Уэйн" }, { "role": "zam", "img": "img/zxczapoy.png", "name": "Кими Старк" }, { "role": "zam", "img": "img/Anim_Maj.png", "name": "Мария Кавасаки" }, { "role": "teacher", "img": "img/toxic_2k72.png", "name": "Кейт Шэдоу" }, { "role": "teacher", "img": "img/ranger113.png", "name": "Кирилл Агнес-Степ" }, { "role": "teacher", "img": "img/Tinaida.png", "name": "Тинаида Добренко" }, { "role": "teacher", "img": "img/AkAi_KyOui.png", "name": "Эвелина Алакрити" }, { "role": "teacher", "img": "img/askalinka_mf.png", "name": "Алия Блейз" }, { "role": "teacher", "img": "img/AnnetKariborro.png", "name": "Агнесс Фальконе" }, { "role": "teacher", "img": "img/Boond007.png", "name": "Даниэль Кобблпот" }, { "role": "teacher", "img": "img/klybhuzka.png", "name": "Ирина Коркина-Коннелли" }, { "role": "teacher", "img": "img/GamerProd.png", "name": "Такеши Мейс" }, { "role": "teacher", "img": "img/Prosto_VaraG.png", "name": "Варвара Уайт" }, { "role": "teacher", "img": "img/katixw.png", "name": "Лаура Рис-Форджер" }, { "role": "teacher", "img": "img/3Be3Da.png", "name": "Виолетта Уэйн" }, { "role": "teacher", "img": "img/ixar_ixar2009.png", "name": "Мэтью Мейс" }, { "role": "teacher", "img": "img/Miha2222.png", "name": "Михаил Рис" } ] }, { "range": "11.09.2025 – 11.10.2025", "staff": [ { "role": "dean", "img": "img/zxczapoy.png", "name": "Кими Старк" }, { "role": "zam", "img": "img/Anim_Maj.png", "name": "Мария Кавасаки" }, { "role": "zam", "img": "img/zam2.png", "name": "??" }, { "role": "teacher", "img": "img/AkAi_KyOui.png", "name": "Эвелина Алакрити" }, { "role": "teacher", "img": "img/klybhuzka.png", "name": "Ирина Коркина-Коннелли" }, { "role": "teacher", "img": "img/katixw.png", "name": "Лаура Рис-Форджер" }, { "role": "teacher", "img": "img/AnnetKariborro.png", "name": "Агнесс Фальконе" }, { "role": "teacher", "img": "img/ranger113.png", "name": "Кирилл Агнес-Степ" }, { "role": "teacher", "img": "img/askalinka_mf.png", "name": "Алия Блейз" }, { "role": "teacher", "img": "img/ixar_ixar2009.png", "name": "Мэтью Мейс" }, { "role": "teacher", "img": "img/3Be3Da.png", "name": "Виолетта Уэйн" }, { "role": "teacher", "img": "img/Miha2222.png", "name": "Михаил Рис" } ] } ]
+[
+  {
+    "range": "11.08.2025 – 11.09.2025",
+    "theme": "neon",
+    "staff": [
+      {"role": "dean", "img": "img/KraiperFeed3.png", "name": "Энвер Уэйн"},
+      
+      {"role": "zam", "img": "img/zxczapoy.png", "name": "Кими Старк"},
+      {"role": "zam", "img": "img/Anim_Maj.png", "name": "Мария Кавасаки"},
+
+      {"role": "teacher", "img": "img/toxic_2k72.png", "name": "Кейт Шэдоу"},
+      {"role": "teacher", "img": "img/ranger113.png", "name": "Кирилл Агнес-Степ"},
+      {"role": "teacher", "img": "img/Tinaida.png", "name": "Тинаида Добренко"},
+      {"role": "teacher", "img": "img/AkAi_KyOui.png", "name": "Эвелина Алакрити"},
+      {"role": "teacher", "img": "img/askalinka_mf.png", "name": "Алия Блейз"},
+      {"role": "teacher", "img": "img/AnnetKariborro.png", "name": "Агнесс Фальконе"},
+      {"role": "teacher", "img": "img/Boond007.png", "name": "Даниэль Кобблпот"},
+      {"role": "teacher", "img": "img/klybhuzka.png", "name": "Ирина Коркина-Коннелли"},
+      {"role": "teacher", "img": "img/GamerProd.png", "name": "Такеши Мейс"},
+      {"role": "teacher", "img": "img/Prosto_VaraG.png", "name": "Варвара Уайт"},
+      {"role": "teacher", "img": "img/katixw.png", "name": "Лаура Рис-Форджер"},
+      {"role": "teacher", "img": "img/3Be3Da.png", "name": "Виолетта Уэйн"},
+      {"role": "teacher", "img": "img/ixar_ixar2009.png", "name": "Мэтью Мейс"},
+      {"role": "teacher", "img": "img/Miha2222.png", "name": "Михаил Рис"}
+    ]
+  },
+  {
+    "range": "11.09.2025 – 11.10.2025",
+    "theme": "fire",
+    "staff": [
+      {"role": "dean", "img": "img/zxczapoy.png", "name": "Кими Старк"},
+      
+      {"role": "zam", "img": "img/Anim_Maj.png", "name": "Мария Кавасаки"},
+      {"role": "zam", "img": "img/zam2.png", "name": "??"},
+
+      {"role": "teacher", "img": "img/AkAi_KyOui.png", "name": "Эвелина Алакрити"},
+      {"role": "teacher", "img": "img/klybhuzka.png", "name": "Ирина Коркина-Коннелли"},
+      {"role": "teacher", "img": "img/katixw.png", "name": "Лаура Рис-Форджер"},
+      {"role": "teacher", "img": "img/AnnetKariborro.png", "name": "Агнесс Фальконе"},
+      {"role": "teacher", "img": "img/ranger113.png", "name": "Кирилл Агнес-Степ"},
+      {"role": "teacher", "img": "img/askalinka_mf.png", "name": "Алия Блейз"},
+      {"role": "teacher", "img": "img/ixar_ixar2009.png", "name": "Мэтью Мейс"},
+      {"role": "teacher", "img": "img/3Be3Da.png", "name": "Виолетта Уэйн"},
+      {"role": "teacher", "img": "img/Miha2222.png", "name": "Михаил Рис"}
+    ]
+  }
+]
