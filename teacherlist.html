@@ -13,6 +13,7 @@
       z-index: -1;
       background: transparent;
     }
+
     :root {
       --bg: #0f1115;
       --card: #171924;
@@ -30,36 +31,37 @@
       flex-direction: column;
       min-height: 100vh;
     }
+
     header {
-  background: #171924;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
-  flex-wrap: wrap;
-}
+      background: #171924;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+      flex-wrap: wrap;
+    }
 
-header h1 {
-  margin: 0;
-  font-size: 20px;
-}
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
 
-nav {
-  margin-top: 10px;
-}
+    nav {
+      margin-top: 10px;
+    }
 
-nav a {
-  color: #f1f1f1;
-  text-decoration: none;
-  margin: 6px 12px;
-  font-weight: bold;
-  display: inline-block;
-}
+    nav a {
+      color: #f1f1f1;
+      text-decoration: none;
+      margin: 6px 12px;
+      font-weight: bold;
+      display: inline-block;
+    }
 
-nav a:hover {
-  color: #ffcc66;
-}
+    nav a:hover {
+      color: #ffcc66;
+    }
 
     main {
       flex: 1;
@@ -228,27 +230,27 @@ nav a:hover {
       }
 
       header {
-    flex-direction: column;
-    text-align: center;
-  }
+        flex-direction: column;
+        text-align: center;
+      }
 
-  nav {
-    margin-top: 12px;
-  }
+      nav {
+        margin-top: 12px;
+      }
 
-  nav a {
-    margin: 8px;
-    font-size: 15px;
-  }
+      nav a {
+        margin: 8px;
+        font-size: 15px;
+      }
 
     }
+
     footer {
       background: #141828;
       border-top: 1px solid #23273a;
       padding: 20px;
       text-align: center;
     }
-  
   </style>
 </head>
 
@@ -280,6 +282,47 @@ nav a:hover {
     <p>© 2025 Университет RPM</p>
   </footer>
   <script>
+    const themes = {
+      cosmos: {
+        vars: {
+          "--bg": "#0f1115",
+          "--card": "#171924",
+          "--text": "#e7e9ee",
+          "--muted": "#a7adbb",
+          "--accent": "#5b9cff",
+          "--photo-border": "2px solid #5b9cff",
+          "--btn-bg": "linear-gradient(135deg,#5b9cff,#3a7add)"
+        },
+        stars: { type: "stars", colors: ["#ffffff", "#d4fbff", "#ffe9c4"] }
+      },
+      neon: {
+        vars: {
+          "--bg": "#050010",
+          "--card": "#0f001f",
+          "--text": "#e0fffc",
+          "--muted": "#7fffff",
+          "--accent": "#ff00cc",
+          "--photo-border": "2px solid #ff00cc",
+          "--btn-bg": "linear-gradient(135deg,#ff00cc,#00ffff)"
+        },
+        stars: { type: "squares", colors: ["#ff00cc", "#00ffff", "#ffff00"] }
+      },
+      fire: {
+        vars: {
+          "--bg": "#1a0f0f",
+          "--card": "#2a1810",
+          "--text": "#ffe5cc",
+          "--muted": "#ffb38a",
+          "--accent": "#ff4500",
+          "--photo-border": "2px solid #ff4500",
+          "--btn-bg": "linear-gradient(135deg,#ff7b00,#ff0000)"
+        },
+        stars: { type: "flames", colors: ["#ff4500", "#ff7b00", "#ffff66"] }
+      }
+    };
+    let currentStarMode = { type: "stars", colors: ["#fff"] };
+
+
     let current = 0;
 
     async function loadStaff() {
@@ -333,6 +376,15 @@ nav a:hover {
       slides.forEach(s => s.classList.remove('active'));
       slides[i].classList.add('active');
       document.getElementById('dateRange').textContent = slides[i].dataset.range;
+      const themeName = window.staffData[i].theme;
+      if (themeName && themes[themeName]) {
+        const theme = themes[themeName];
+        for (const [k, v] of Object.entries(theme.vars)) {
+          document.documentElement.style.setProperty(k, v);
+        }
+        currentStarMode = theme.stars;
+        resizeStars();
+      }
     }
 
     function nextSlide() {
@@ -374,28 +426,47 @@ nav a:hover {
 
     function drawStars() {
       ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+
       for (const s of stars) {
         s.x += s.dx;
         s.y += s.dy;
 
-        // выход за экран → перенос на другую сторону
         if (s.x < 0) s.x = starCanvas.width;
         if (s.x > starCanvas.width) s.x = 0;
         if (s.y < 0) s.y = starCanvas.height;
         if (s.y > starCanvas.height) s.y = 0;
 
-        // мерцание
         s.twinkle += 0.05 + Math.random() * 0.02;
         const alpha = 0.5 + 0.5 * Math.sin(s.twinkle);
 
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = s.color;
         ctx.globalAlpha = alpha;
-        ctx.fill();
+        ctx.fillStyle = s.color;
+
+        if (currentStarMode.type === "stars") {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (currentStarMode.type === "squares") {
+          ctx.fillRect(s.x, s.y, s.r * 2, s.r * 2);
+        } else if (currentStarMode.type === "flames") {
+          ctx.beginPath();
+          ctx.moveTo(s.x, s.y - s.r);
+          ctx.lineTo(s.x + s.r, s.y + s.r);
+          ctx.lineTo(s.x - s.r, s.y + s.r);
+          ctx.closePath();
+          ctx.fill();
+        } else if (currentStarMode.type === "circles") {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(s.x, s.y, 2, 2);
+        }
       }
+
       ctx.globalAlpha = 1;
     }
+
 
     function animateStars() {
       drawStars();
