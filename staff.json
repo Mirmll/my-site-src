@@ -1,0 +1,29 @@
+[
+  {
+    "range": "11.08.2025 – 11.09.2025",
+    "theme": "cosmos",
+    "staff": [
+      {
+        "role": "dean",
+        "img": "img/KraiperFeed3.png",
+        "name": "Энвер Уэйн"
+      },
+      {
+        "role": "zam",
+        "img": "img/zxczapoy.png",
+        "name": "Кими Старк"
+      }
+    ]
+  },
+  {
+    "range": "11.09.2025 – 11.10.2025",
+    "theme": "neon",
+    "staff": [
+      {
+        "role": "dean",
+        "img": "img/zxczapoy.png",
+        "name": "Кими Старк"
+      }
+    ]
+  }
+]
