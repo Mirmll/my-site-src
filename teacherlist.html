@@ -316,14 +316,8 @@
   <script>
     let current = 0;
 
-    // порядок тем: по индексу слайда
     const themeOrder = ['neon', 'fire', 'forest', 'water'];
 
-    // Привязка тем к тексту range (ключи — шаблоны для поиска)
-    // Поддерживаются три типа ключей:
-    // 1) точное совпадение (range === key)
-    // 2) подстрока (range.includes(key))
-    // 3) регулярное выражение — ключ начинается с "re:" (например "re:08\\.2025|Aug")
     const RANGE_THEME_MAP = {
     };
 
@@ -373,8 +367,8 @@
         stars: {
           colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'],
           densityDivisor: 12000,
-          speed: 0.15,
-          twinkleSpeed: 0.1
+          speed: 0.35,
+          twinkleSpeed: 0.07
         }
       },
       fire: {
