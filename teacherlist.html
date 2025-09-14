@@ -373,8 +373,8 @@
         stars: {
           colors: ['#7effc7', '#8b5cff', '#00f0ff', '#fff6f8'],
           densityDivisor: 12000,
-          speed: 0.25,
-          twinkleSpeed: 0.12
+          speed: 0.15,
+          twinkleSpeed: 0.1
         }
       },
       fire: {
@@ -396,7 +396,7 @@
           colors: ['#ffd1a9', '#ff7a2d', '#ffd9c4'],
           densityDivisor: 9000,
           speed: 0.35,
-          twinkleSpeed: 0.2
+          twinkleSpeed: 0.02
         }
       },
       forest: {
@@ -606,6 +606,7 @@
         ctx.fillStyle = s.color;
         ctx.globalAlpha = alpha;
         ctx.fill();
+
         ctx.globalAlpha = 1;
       }
     }
